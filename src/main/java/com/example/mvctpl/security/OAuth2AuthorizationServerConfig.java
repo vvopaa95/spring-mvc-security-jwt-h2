@@ -1,15 +1,16 @@
 package com.example.mvctpl.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
@@ -24,55 +25,71 @@ import java.util.Arrays;
 @EnableAuthorizationServer
 public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
   private final AuthenticationManager authenticationManager;
-  private final CustomAccessTokenConverter customAccessTokenConverter;
+
+  private String clientid = "tutorialspoint";
+  private String clientSecret = "my-secret-key";
+  private String privateKey = "private key";
+  private String publicKey = "public key";
 
   @Autowired
-  public OAuth2AuthorizationServerConfig(
-    @Qualifier("authenticationManagerBean") AuthenticationManager authenticationManager,
-    CustomAccessTokenConverter customAccessTokenConverter
-  ) {
+  public OAuth2AuthorizationServerConfig(AuthenticationManager authenticationManager) {
     this.authenticationManager = authenticationManager;
-    this.customAccessTokenConverter = customAccessTokenConverter;
-  }
-
-  @Override
-  public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-    TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
-    tokenEnhancerChain.setTokenEnhancers(Arrays.asList(tokenEnhancer(), accessTokenConverterAuthServer()));
-
-    endpoints.tokenStore(tokenStoreAuthServer())
-      .accessTokenConverter(accessTokenConverterAuthServer())
-      .authenticationManager(authenticationManager);
   }
 
   @Bean
-  public TokenStore tokenStoreAuthServer() {
-    return new JwtTokenStore(accessTokenConverterAuthServer());
-  }
-
-  @Bean
-  public JwtAccessTokenConverter accessTokenConverterAuthServer() {
+  public JwtAccessTokenConverter tokenEnhancer() {
     JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-    //converter.setAccessTokenConverter(customAccessTokenConverter);
-    //converter.setSigningKey("123");
-
-    KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(
-      new ClassPathResource("vvopaa.jks"), "d4i6m8a7".toCharArray());
-    converter.setKeyPair(keyStoreKeyFactory.getKeyPair("vvopaa"));
+    converter.setSigningKey(privateKey);
+    converter.setVerifierKey(publicKey);
     return converter;
   }
 
   @Bean
-  @Primary
-  public DefaultTokenServices tokenServicesAuthServer() {
-    DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-    defaultTokenServices.setTokenStore(tokenStoreAuthServer());
-    defaultTokenServices.setSupportRefreshToken(true);
-    return defaultTokenServices;
+  public TokenStore tokenStore() {
+    return new JwtTokenStore(tokenEnhancer());
   }
 
-  @Bean
-  public TokenEnhancer tokenEnhancer() {
-    return new CustomTokenEnhancer();
+  @Override
+  public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
+    //TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+    //tokenEnhancerChain.setTokenEnhancers(Arrays.asList(tokenEnhancer(), accessTokenConverter()));
+
+    endpoints.tokenStore(tokenStore())
+      .accessTokenConverter(tokenEnhancer())
+      .authenticationManager(authenticationManager);
+  }
+
+  @Override
+  public void configure(AuthorizationServerSecurityConfigurer security) {
+    security.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
+  }
+
+//    @Bean
+//    public JwtAccessTokenConverter accessTokenConverter() {
+//      JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+//      //converter.setAccessTokenConverter(customAccessTokenConverter);
+//      //converter.setSigningKey("123");
+//
+//      KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(
+//        new ClassPathResource("vvopaa.jks"), "d4i6m8a7".toCharArray());
+//      converter.setKeyPair(keyStoreKeyFactory.getKeyPair("vvopaa"));
+//      return converter;
+//    }
+//
+//    @Bean
+//    @Primary
+//    public DefaultTokenServices tokenServices() {
+//      DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+//      defaultTokenServices.setTokenStore(tokenStore());
+//      defaultTokenServices.setSupportRefreshToken(true);
+//      return defaultTokenServices;
+//    }
+
+  @Override
+  public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+    clients.inMemory().withClient(clientid).secret(clientSecret).scopes("read", "write")
+      .authorizedGrantTypes("password", "refresh_token").accessTokenValiditySeconds(20000)
+      .refreshTokenValiditySeconds(20000);
+
   }
 }

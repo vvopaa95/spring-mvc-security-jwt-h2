@@ -9,8 +9,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
-@Service("userServiceMain")
+
 @Slf4j
+@Service("userServiceMain")
 public class UserService implements UserDetailsService {
   private final UserRepository userRepository;
 

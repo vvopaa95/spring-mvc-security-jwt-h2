@@ -7,7 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.ArrayList;
-import java.util.Collection;
+//import java.util.Collection;
+import java.util.List;
 
 @Data
 @Entity
@@ -18,5 +19,7 @@ public class User {
   private Long id;
   private String userName;
   private String password;
-  private Collection<GrantedAuthority> grantedAuthoritiesList = new ArrayList<>();
+
+
+  //private List<GrantedAuthority> grantedAuthoritiesList = new ArrayList<>();
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+/*
 @Component
 public class CustomAccessTokenConverter extends DefaultAccessTokenConverter {
   @Override
@@ -15,3 +16,4 @@ public class CustomAccessTokenConverter extends DefaultAccessTokenConverter {
     return authentication;
   }
 }
+*/
