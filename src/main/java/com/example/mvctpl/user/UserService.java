@@ -1,0 +1,32 @@
+package com.example.mvctpl.user;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+
+@Service("userServiceMain")
+@Slf4j
+public class UserService implements UserDetailsService {
+  private final UserRepository userRepository;
+
+  @Autowired
+  public UserService(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
+
+  @Override
+  public UserDetails loadUserByUsername(final String username) {
+    try {
+      User users = userRepository.getByUserName(username);
+      return new org.springframework.security.core.userdetails.User(users.getUserName(), users.getPassword(), new ArrayList<>());
+    } catch (Exception e) {
+      log.info(e.getMessage());
+      throw new UsernameNotFoundException("User " + username + " was not found in the database");
+    }
+  }
+}

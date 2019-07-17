@@ -1,29 +1,40 @@
 package com.example.mvctpl.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.sql.DataSource;
 
 @EnableWebSecurity
+@Configuration
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-  private final DataSource dataSource;
-  private UserDetailsService userDetailsService;
+  private final UserDetailsService userDetailsService;
 
-  public WebSecurityConfiguration(final DataSource dataSource) {
-    this.dataSource = dataSource;
+  @Autowired
+  public WebSecurityConfiguration(@Qualifier("userServiceMain") UserDetailsService userDetailsService) {
+    this.userDetailsService = userDetailsService;
+  }
+
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.authorizeRequests()
+      .anyRequest().permitAll()
+      .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
   }
 
   @Override
   protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
   }
 
   @Bean
@@ -35,14 +46,5 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
   @Bean
   public PasswordEncoder passwordEncoder() {
     return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-  }
-
-  @Bean
-  public UserDetailsService userDetailsService() {
-    if (userDetailsService == null) {
-      userDetailsService = new JdbcDaoImpl();
-      ((JdbcDaoImpl) userDetailsService).setDataSource(dataSource);
-    }
-    return userDetailsService;
   }
 }
