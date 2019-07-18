@@ -1,5 +1,7 @@
+
 package com.example.mvctpl.security;
-/*
+
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.context.annotation.Bean;
@@ -26,41 +28,5 @@ import java.util.Map;
 @EnableResourceServer
 public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
-  @Override
-  public void configure(ResourceServerSecurityConfigurer config) {
-    config.tokenServices(tokenServices());
-  }
-
-  @Bean
-  public TokenStore tokenStore() {
-    return new JwtTokenStore(accessTokenConverter());
-  }
-
-  @Bean
-  public JwtAccessTokenConverter accessTokenConverter() {
-    JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-    Resource resource = new ClassPathResource("public.txt");
-    String publicKey = null;
-    try {
-      publicKey = IOUtils.toString(resource.getInputStream(), Charset.defaultCharset());
-    } catch (final IOException e) {
-      log.warn(e.getMessage());
-    }
-    converter.setVerifierKey(publicKey);
-    return converter;
-  }
-
-  @Bean
-  public DefaultTokenServices tokenServices() {
-    DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-    defaultTokenServices.setTokenStore(tokenStore());
-    return defaultTokenServices;
-  }
-
-  public Map<String, Object> getExtraInfo(OAuth2Authentication auth) {
-    OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) auth.getDetails();
-    OAuth2AccessToken accessToken = tokenStore().readAccessToken(details.getTokenValue());
-    return accessToken.getAdditionalInformation();
-  }
 }
-*/
+
