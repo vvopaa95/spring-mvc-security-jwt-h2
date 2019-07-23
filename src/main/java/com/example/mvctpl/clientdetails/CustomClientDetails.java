@@ -13,7 +13,7 @@ import java.util.*;
 @Entity
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class ClientDetails extends AuditEntity {
+class CustomClientDetails extends AuditEntity {
   @NotNull
   private String clientId;
   private String clientSecret;

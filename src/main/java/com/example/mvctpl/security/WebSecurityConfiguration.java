@@ -49,11 +49,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     return super.authenticationManagerBean();
   }
 
-  @Override
-  public void configure(WebSecurity web) throws Exception {
-    //web.ignoring().antMatchers("/*");;
-  }
-
   @Bean
   public PasswordEncoder passwordEncoder() {
     return PasswordEncoderFactories.createDelegatingPasswordEncoder();

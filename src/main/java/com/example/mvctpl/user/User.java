@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @Entity
 class User extends AuditEntity {
-  private String userName;
+  private String username;
   private String password;
 
 
