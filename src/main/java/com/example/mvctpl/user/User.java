@@ -1,6 +1,8 @@
 package com.example.mvctpl.user;
 
+import com.example.mvctpl.core.AuditEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Entity;
@@ -10,13 +12,10 @@ import java.util.ArrayList;
 //import java.util.Collection;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = false)
 @Data
 @Entity
-public class User {
-
-  @Id
-  @GeneratedValue
-  private Long id;
+class User extends AuditEntity {
   private String userName;
   private String password;
 

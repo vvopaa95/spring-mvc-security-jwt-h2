@@ -66,6 +66,7 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
   public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
     String clientid = "vvopaa";
     String clientSecret = "{noop}123";
+    //clients.jdbc()
     clients.inMemory().withClient(clientid).secret(clientSecret).scopes("read", "write")
       .authorizedGrantTypes("password", "refresh_token").accessTokenValiditySeconds(20000)
       .refreshTokenValiditySeconds(20000);
