@@ -25,7 +25,7 @@ import java.util.Map;
 
 @Configuration
 @Slf4j
-@EnableResourceServer
+//@EnableResourceServer
 public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 }

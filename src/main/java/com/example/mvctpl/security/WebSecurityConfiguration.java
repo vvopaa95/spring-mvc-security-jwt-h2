@@ -30,8 +30,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.authorizeRequests()
+      .antMatchers("/h2_console/**").permitAll()
       .anyRequest().permitAll()
-      .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
+      .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
+      .and().headers().frameOptions().sameOrigin()
+      .and().csrf().disable();
   }
 
   @Override
@@ -48,7 +51,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Override
   public void configure(WebSecurity web) throws Exception {
-    web.ignoring().antMatchers("/signup");;
+    //web.ignoring().antMatchers("/*");;
   }
 
   @Bean
