@@ -1,5 +1,6 @@
 package com.example.mvctpl.security;
 
+/*
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -28,4 +29,5 @@ import java.util.Map;
 public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 }
+*/
 

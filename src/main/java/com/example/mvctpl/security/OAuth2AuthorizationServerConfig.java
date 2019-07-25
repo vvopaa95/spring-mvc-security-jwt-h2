@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -62,15 +63,17 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
 
   @Override
   public void configure(AuthorizationServerSecurityConfigurer security) {
-    security.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
+    security.tokenKeyAccess("permitAll()")
+       .checkTokenAccess("isAuthenticated()")
+       .passwordEncoder(NoOpPasswordEncoder.getInstance());
   }
 
   @Override
   public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
     //clients.withClientDetails(clientDetailsService);
-    String clientid = "vvopaa";
-    String clientSecret = "{noop}123";
-    clients.inMemory().withClient(clientid).secret(clientSecret).scopes("read", "write")
+    String clientId = "v";
+    String clientSecret = "{noop}v";
+    clients.inMemory().withClient(clientId).secret(clientSecret).scopes("read", "write")
     .authorizedGrantTypes("password", "refresh_token").accessTokenValiditySeconds(20000)
     .refreshTokenValiditySeconds(20000);
 
