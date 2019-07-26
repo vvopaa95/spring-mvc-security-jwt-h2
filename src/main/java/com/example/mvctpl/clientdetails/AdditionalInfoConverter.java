@@ -26,10 +26,12 @@ public class AdditionalInfoConverter implements AttributeConverter<Map<String, O
   public Map<String, Object> convertToEntityAttribute(String s) {
     final Map<String, Object> result = new HashMap<>();
     Optional.ofNullable(s).ifPresent(s1 -> {
-      String[] mapElement = s1.split(ELEMENTS_DELIMITER);
-      for (String element: mapElement) {
-        String[] keyValue = element.split(KEY_VALUE_DELIMITER);
-        result.put(keyValue[0], keyValue[1]);
+      if(!s1.equals("")) {
+        String[] mapElement = s1.split(ELEMENTS_DELIMITER);
+        for (String element: mapElement) {
+          String[] keyValue = element.split(KEY_VALUE_DELIMITER);
+          result.put(keyValue[0], keyValue[1]);
+        }
       }
     });
     return result;

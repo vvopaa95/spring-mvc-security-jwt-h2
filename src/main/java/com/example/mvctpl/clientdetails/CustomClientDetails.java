@@ -13,7 +13,7 @@ import java.util.*;
 @Entity
 @EqualsAndHashCode(callSuper = false)
 @Data
-class CustomClientDetails extends AuditEntity {
+public class CustomClientDetails extends AuditEntity {
   @NotNull
   private String clientId;
   private String clientSecret;
@@ -29,8 +29,8 @@ class CustomClientDetails extends AuditEntity {
   private Set<String> registeredRedirectUri = new HashSet<>();
   @ElementCollection(targetClass=String.class)
   private Collection<String> authorities = new HashSet<>();
-  private Integer accessTokenValiditySeconds;
-  private Integer refreshTokenValiditySeconds;
+  private int accessTokenValiditySeconds;
+  private int refreshTokenValiditySeconds;
   private boolean autoApprove;
 
   @Convert(converter = AdditionalInfoConverter.class)
