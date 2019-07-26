@@ -23,7 +23,7 @@ public class UserService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(final String username) {
     try {
-      User users = loadByUsername(username);
+      User users = getByUsername(username);
       return new org.springframework.security.core.userdetails.User(users.getUsername(), users.getPassword(), new ArrayList<>());
     } catch (Exception e) {
       log.info(e.getMessage());
@@ -31,7 +31,15 @@ public class UserService implements UserDetailsService {
     }
   }
 
-  public User loadByUsername(final String name) {
+  User getByUsername(final String name) {
     return userRepository.findByUsername(name);
+  }
+
+  Iterable<User> getAllUsers() {
+    return userRepository.findAll();
+  }
+
+  User createUser(String username, String password) {
+    return userRepository.save(new User(username, password));
   }
 }
