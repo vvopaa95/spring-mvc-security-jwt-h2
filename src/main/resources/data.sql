@@ -1,11 +1,15 @@
 INSERT INTO user
 (username, password)
-VALUES
-('vvopaa', '{bcrypt}$2y$10$DQn7lgMzJ/KjSiGj3Y57ae9IzNUF0NzvCVgOpxwjzE9jNLnPeWg/y');
+VALUES ('vvopaa', '{bcrypt}$2y$10$DQn7lgMzJ/KjSiGj3Y57ae9IzNUF0NzvCVgOpxwjzE9jNLnPeWg/y'),
+('root', '{bcrypt}$2a$10$70YvTnHkcwX6YphCa.zI7O3QAqiqGbR.NHoJWnFFEkpv2lUWyKWxO');
 
-INSERT INTO user
-(username, password)
-VALUES('root', '{bcrypt}$2a$10$70YvTnHkcwX6YphCa.zI7O3QAqiqGbR.NHoJWnFFEkpv2lUWyKWxO');
+INSERT INTO role
+(name)
+VALUES ('ROLE_USER'),('ROLE_MODERATOR'),('ROLE_ADMIN');
+
+INSERT INTO user_role
+(user_id, role_id)
+VALUES (1,1),(1,2),(1,3),(2,1);
 
 INSERT INTO custom_client_details
 (client_id, client_secret, auto_approve, scoped, secret_required,

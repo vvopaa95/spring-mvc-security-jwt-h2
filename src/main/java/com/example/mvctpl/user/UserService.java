@@ -1,5 +1,6 @@
 package com.example.mvctpl.user;
 
+import com.example.mvctpl.user.pojo.CommonUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,5 +42,13 @@ public class UserService implements UserDetailsService {
 
   User createUser(String username, String password) {
     return userRepository.save(new User(username, password));
+  }
+
+  CommonUser getCommonUserInfo(long id) {
+    return userRepository.getById(id);
+  }
+
+  long countUsersByRoleName(String roleName) {
+    return userRepository.countByRole_Name(roleName);
   }
 }

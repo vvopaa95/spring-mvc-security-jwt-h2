@@ -1,6 +1,7 @@
 package com.example.mvctpl.user;
 
 import com.example.mvctpl.user.payload.CreateUserRequest;
+import com.example.mvctpl.user.pojo.CommonUser;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -43,5 +44,15 @@ public class UserController {
     return Optional.ofNullable(userService.getByUsername(username))
       .map(ResponseEntity::ok)
       .orElse(ResponseEntity.badRequest().body(null));
+  }
+
+  @GetMapping("count/by-role")
+  public long countUsersByRole(@RequestParam String roleName) {
+    return userService.countUsersByRoleName(roleName);
+  }
+
+  @GetMapping("common/{id}")
+  public CommonUser getCommonUserInfo(@PathVariable long id) {
+    return userService.getCommonUserInfo(id);
   }
 }
