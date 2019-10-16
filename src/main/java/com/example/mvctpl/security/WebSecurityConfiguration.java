@@ -19,12 +19,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 @Configuration
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-  private final UserDetailsService userDetailsService;
-
+  @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
   @Autowired
-  public WebSecurityConfiguration(@Qualifier("userServiceMain") UserDetailsService userDetailsService) {
-    this.userDetailsService = userDetailsService;
-  }
+  @Qualifier("userServiceMain")
+  private UserDetailsService userDetailsService;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
