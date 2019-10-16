@@ -1,11 +1,13 @@
 package com.example.mvctpl.user;
 
 import com.example.mvctpl.user.pojo.CommonUser;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,13 +15,10 @@ import java.util.ArrayList;
 
 @Slf4j
 @Service("userServiceMain")
+@AllArgsConstructor
 public class UserService implements UserDetailsService {
   private final UserRepository userRepository;
-
-  @Autowired
-  public UserService(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
+  private final PasswordEncoder passwordEncoder;
 
   @Override
   public UserDetails loadUserByUsername(final String username) {
@@ -41,7 +40,7 @@ public class UserService implements UserDetailsService {
   }
 
   User createUser(String username, String password) {
-    return userRepository.save(new User(username, password));
+    return userRepository.save(new User(username, passwordEncoder.encode(password)));
   }
 
   CommonUser getCommonUserInfo(long id) {
@@ -50,5 +49,9 @@ public class UserService implements UserDetailsService {
 
   long countUsersByRoleName(String roleName) {
     return userRepository.countByRole_Name(roleName);
+  }
+
+  String encodeString(String string) {
+    return passwordEncoder.encode(string);
   }
 }

@@ -17,11 +17,10 @@ import java.util.Optional;
 @RequestMapping("user")
 public class UserController {
   private final UserService userService;
-  private final PasswordEncoder passwordEncoder;
 
-  @GetMapping("encode")
-  public String custom(@RequestParam String password) {
-    return passwordEncoder.encode(password);
+  @GetMapping("encode-test")
+  public String getEncodedString(@RequestParam String password) {
+    return userService.encodeString(password);
   }
 
   @GetMapping("all")
@@ -32,8 +31,7 @@ public class UserController {
   @PostMapping("create")
   public ResponseEntity createUser(@RequestBody CreateUserRequest createUserRequest) {
     return Optional
-      .ofNullable(
-        userService.createUser(createUserRequest.getUsername(), passwordEncoder.encode(createUserRequest.getPassword())))
+      .ofNullable(userService.createUser(createUserRequest.getUsername(), createUserRequest.getPassword()))
       .map(user -> new ResponseEntity<>(HttpStatus.CREATED))
       .orElse(ResponseEntity.badRequest().body(new Object()));
   }

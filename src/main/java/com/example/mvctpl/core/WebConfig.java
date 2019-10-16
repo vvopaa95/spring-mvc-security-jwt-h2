@@ -17,7 +17,6 @@ public class WebConfig extends WebMvcConfigurationSupport {
         mapper.registerModule(new Hibernate5Module());
         messageConverter.setObjectMapper(mapper);
         return messageConverter;
-
     }
 
     @Override
