@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
@@ -38,6 +40,7 @@ public class UserService implements UserDetailsService {
     return userRepository.findAll();
   }
 
+  //Transactional readOnly = true: JDBC error, ORM - only with supports error
   User createUser(String username, String password) {
     return userRepository.save(new User(username, passwordEncoder.encode(password)));
   }
